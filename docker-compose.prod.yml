@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: ncre-backend
+    restart: unless-stopped
+    volumes:
+      - ./backend/ncre_review.db:/app/ncre_review.db
+    environment:
+      APP_NAME: NCRE Review System API
+      APP_ENV: production
+      API_V1_PREFIX: /api/v1
+      SQLITE_DB_PATH: /app/ncre_review.db
+      CORS_ORIGINS: http://localhost,http://127.0.0.1
+    expose:
+      - "8000"
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: ncre-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"

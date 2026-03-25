@@ -1,0 +1,50 @@
+:root {
+  color-scheme: light;
+  --app-bg: #f3f6fb;
+  --panel-bg: #ffffff;
+  --brand: #1f6feb;
+  --brand-deep: #15499a;
+  --text-primary: #1d2736;
+  --text-secondary: #5b6778;
+  --border-soft: #dbe4f0;
+  --shadow-soft: 0 18px 40px rgba(34, 60, 110, 0.08);
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top left, #e9f1ff 0, #f3f6fb 48%, #eef3f9 100%);
+  color: var(--text-primary);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+.page-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--border-soft);
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+.page-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.page-subtitle {
+  margin: 10px 0 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
