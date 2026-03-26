@@ -25,7 +25,21 @@ class ChapterOutlineSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class PaperSummarySchema(BaseModel):
+    id: int
+    code: str
+    year: int
+    season: str
+    title: str
+    total_questions: int
+    total_score: int
+    duration_minutes: int
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class SubjectDetailSchema(SubjectListSchema):
     recommended_path: str | None = None
     chapters: list[ChapterOutlineSchema]
     statistics: dict
+    papers: list[PaperSummarySchema] = []

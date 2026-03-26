@@ -32,3 +32,7 @@ class Subject(TimestampMixin, Base):
     wrong_questions: Mapped[List["WrongQuestion"]] = relationship(back_populates="subject")
     favorites: Mapped[List["FavoriteQuestion"]] = relationship(back_populates="subject")
     mock_exams: Mapped[List["MockExam"]] = relationship(back_populates="subject")
+    papers: Mapped[List["Paper"]] = relationship(
+        back_populates="subject",
+        cascade="all, delete-orphan",
+    )

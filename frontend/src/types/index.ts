@@ -24,6 +24,30 @@ export interface SubjectDetail extends Subject {
     estimated_minutes: number
   }>
   statistics: Record<string, number>
+  papers: PastPaperSummary[]
+}
+
+export interface PastPaperSummary {
+  id: number
+  code: string
+  year: number
+  season: string
+  title: string
+  total_questions: number
+  total_score: number
+  duration_minutes: number
+}
+
+export interface PastPaperDetail extends PastPaperSummary {
+  subject_id: number
+  source_type: string
+  description?: string
+  questions: Array<{
+    sort_order: number
+    section_name?: string
+    score: number
+    question: Question
+  }>
 }
 
 export interface Question {

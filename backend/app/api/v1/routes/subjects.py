@@ -4,8 +4,8 @@ from sqlalchemy import func, select
 from app.api.v1.deps import CurrentUser, DBSession
 from app.core.exceptions import NotFoundException
 from app.core.response import success_response
-from app.models import MockExam, Question, StudyRecord, Subject, WrongQuestion
-from app.schemas.subject import ChapterOutlineSchema, SubjectDetailSchema, SubjectListSchema
+from app.models import MockExam, Paper, Question, StudyRecord, Subject, WrongQuestion
+from app.schemas.subject import ChapterOutlineSchema, PaperSummarySchema, SubjectDetailSchema, SubjectListSchema
 
 router = APIRouter(prefix="/subjects")
 
@@ -70,6 +70,11 @@ def get_subject(subject_id: int, db: DBSession, current_user: CurrentUser) -> di
         "wrong_count": wrong_count,
         "completed_mock_exams": completed_mock_exams,
     }
+    papers = db.scalars(
+        select(Paper)
+        .where(Paper.subject_id == subject_id)
+        .order_by(Paper.year.desc(), Paper.id.desc())
+    ).all()
 
     data = SubjectDetailSchema(
         id=subject.id,
@@ -81,5 +86,6 @@ def get_subject(subject_id: int, db: DBSession, current_user: CurrentUser) -> di
         recommended_path=subject.recommended_path,
         chapters=[ChapterOutlineSchema.model_validate(chapter) for chapter in subject.chapters],
         statistics=statistics,
+        papers=[PaperSummarySchema.model_validate(paper) for paper in papers],
     ).model_dump()
     return success_response(data=data)

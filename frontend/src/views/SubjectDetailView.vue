@@ -12,7 +12,7 @@
       <div class="meta-row">
         <el-tag>{{ detail.level }}</el-tag>
         <el-tag type="success">考试时长 {{ detail.exam_duration_minutes }} 分钟</el-tag>
-        <el-tag type="warning">题库数量 {{ detail.statistics.total_questions }}</el-tag>
+        <el-tag type="warning">题库总量 {{ detail.statistics.total_questions }}</el-tag>
       </div>
     </section>
 
@@ -24,10 +24,10 @@
       <div class="page-card quick-card">
         <h3>学习统计</h3>
         <ul>
-          <li>累计做题：{{ detail.statistics.total_answered }}</li>
-          <li>正确率：{{ detail.statistics.accuracy_rate }}%</li>
-          <li>错题数：{{ detail.statistics.wrong_count }}</li>
-          <li>已完成模拟考试：{{ detail.statistics.completed_mock_exams }}</li>
+          <li>累计答题 {{ detail.statistics.total_answered }}</li>
+          <li>正确率 {{ detail.statistics.accuracy_rate }}%</li>
+          <li>错题数 {{ detail.statistics.wrong_count }}</li>
+          <li>已完成模拟考试 {{ detail.statistics.completed_mock_exams }}</li>
         </ul>
       </div>
     </section>
@@ -38,6 +38,25 @@
         <el-button type="success" @click="goPractice('random')">随机刷题</el-button>
         <el-button type="warning" @click="router.push(`/mock-exam?subjectId=${detail.id}`)">模拟考试</el-button>
       </div>
+    </section>
+
+    <section class="page-card page-wrap">
+      <div class="section-head">
+        <div>
+          <h3>历年真题</h3>
+          <p>按年份查看该科目的历年套卷结构，后续可继续补充更多年份与原题内容。</p>
+        </div>
+      </div>
+      <div v-if="detail.papers.length" class="paper-list">
+        <div v-for="paper in detail.papers" :key="paper.id" class="paper-item">
+          <div>
+            <strong>{{ paper.title }}</strong>
+            <p>{{ paper.year }} · {{ paper.season }} · {{ paper.total_questions }} 题 · {{ paper.total_score }} 分</p>
+          </div>
+          <el-button type="primary" plain @click="router.push(`/papers/${paper.id}`)">查看套卷</el-button>
+        </div>
+      </div>
+      <el-empty v-else description="该科目暂未导入历年真题" />
     </section>
 
     <section class="page-card page-wrap">
@@ -89,7 +108,9 @@ onMounted(async () => {
 .detail-head,
 .meta-row,
 .action-row,
-.chapter-item {
+.chapter-item,
+.paper-item,
+.section-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -117,18 +138,22 @@ onMounted(async () => {
 
 .quick-card p,
 .quick-card li,
-.chapter-item p {
+.chapter-item p,
+.section-head p,
+.paper-item p {
   color: var(--text-secondary);
   line-height: 1.7;
 }
 
-.chapter-list {
+.chapter-list,
+.paper-list {
   display: grid;
   gap: 14px;
   margin-top: 18px;
 }
 
-.chapter-item {
+.chapter-item,
+.paper-item {
   padding: 18px;
   border-radius: 16px;
   border: 1px solid var(--border-soft);
@@ -141,7 +166,9 @@ onMounted(async () => {
   }
 
   .detail-head,
-  .chapter-item {
+  .chapter-item,
+  .paper-item,
+  .section-head {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;

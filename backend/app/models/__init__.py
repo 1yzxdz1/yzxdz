@@ -3,6 +3,8 @@ from app.models.chapter import Chapter
 from app.models.favorite_question import FavoriteQuestion
 from app.models.mock_exam import MockExam
 from app.models.mock_exam_answer import MockExamAnswer
+from app.models.paper import Paper
+from app.models.paper_question import PaperQuestion
 from app.models.question import Question
 from app.models.study_record import StudyRecord
 from app.models.subject import Subject
@@ -20,4 +22,6 @@ __all__ = [
     "FavoriteQuestion",
     "MockExam",
     "MockExamAnswer",
+    "Paper",
+    "PaperQuestion",
 ]

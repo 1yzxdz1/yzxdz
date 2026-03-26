@@ -1,5 +1,5 @@
 import http from './http'
-import type { ApiResponse, Question, Subject, SubjectDetail } from '@/types'
+import type { ApiResponse, PastPaperDetail, PastPaperSummary, Question, Subject, SubjectDetail } from '@/types'
 
 export const register = (payload: Record<string, unknown>) =>
   http.post('/auth/register', payload)
@@ -15,6 +15,12 @@ export const getSubjects = () => http.get<never, ApiResponse<Subject[]>>('/subje
 
 export const getSubjectDetail = (id: number) =>
   http.get<never, ApiResponse<SubjectDetail>>(`/subjects/${id}`)
+
+export const getPapers = (subjectId?: number) =>
+  http.get<never, ApiResponse<PastPaperSummary[]>>(`/papers${subjectId ? `?subject_id=${subjectId}` : ''}`)
+
+export const getPaperDetail = (id: number) =>
+  http.get<never, ApiResponse<PastPaperDetail>>(`/papers/${id}`)
 
 export const getChapters = (subjectId?: number) =>
   http.get(`/chapters${subjectId ? `?subject_id=${subjectId}` : ''}`)
