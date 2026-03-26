@@ -105,6 +105,87 @@ Then later you can add HTTPS with:
 - or Caddy
 - or a cloud load balancer
 
+## Recommended Step 8: Enable HTTPS with Caddy
+
+This repository includes an optional HTTPS layer:
+
+- `docker-compose.domain.yml`
+- `infra/caddy/Caddyfile`
+
+Use it after your domain has already been resolved to the server IP.
+
+### 8.1 Prepare DNS
+
+Example:
+
+- `ncre.yourdomain.com -> <your-server-ip>`
+
+Wait until the DNS record takes effect.
+
+### 8.2 Open firewall ports
+
+Make sure these ports are open in the cloud firewall/security group:
+
+- `80`
+- `443`
+
+### 8.3 Create a domain env file on the server
+
+In the project root on the server:
+
+```bash
+cd ~/yzxdz
+cat > .env.domain <<EOF
+DOMAIN=ncre.yourdomain.com
+EOF
+```
+
+Replace `ncre.yourdomain.com` with your real domain.
+
+### 8.4 Start the HTTPS stack
+
+Stop the old IP-only frontend first:
+
+```bash
+cd ~/yzxdz
+sudo docker-compose -f docker-compose.prod.yml down
+```
+
+Then start the domain mode:
+
+```bash
+cd ~/yzxdz
+sudo docker-compose --env-file .env.domain -f docker-compose.prod.yml -f docker-compose.domain.yml up -d --build
+```
+
+### 8.5 Access your website
+
+Open:
+
+- `https://ncre.yourdomain.com`
+
+Caddy will automatically apply for and renew the HTTPS certificate.
+
+### 8.6 Common checks
+
+Check containers:
+
+```bash
+sudo docker ps
+```
+
+Check Caddy logs:
+
+```bash
+sudo docker logs ncre-caddy --tail 100
+```
+
+If HTTPS is not issued successfully yet, the most common reasons are:
+
+- DNS has not taken effect yet
+- Port `80` or `443` is not open
+- The domain is not pointing to the correct server IP
+
 ## Notes
 
 - This MVP uses SQLite, which is fine for demo and low traffic.

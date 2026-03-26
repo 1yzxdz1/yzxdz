@@ -13,18 +13,75 @@ from app.services.evaluation import build_question_payload, evaluate_question, u
 router = APIRouter(prefix="/mock-exams")
 
 
+QUESTION_TYPE_ORDER = ["single_choice", "multiple_choice", "true_false", "short_answer"]
+DIFFICULTY_ORDER = ["hard", "medium", "easy"]
+
+
+def pick_exam_questions(questions: list[Question], question_count: int) -> list[Question]:
+    if len(questions) <= question_count:
+        return questions
+
+    type_targets = {
+        "single_choice": max(4, round(question_count * 0.4)),
+        "multiple_choice": max(2, round(question_count * 0.2)),
+        "true_false": max(2, round(question_count * 0.2)),
+        "short_answer": max(1, round(question_count * 0.2)),
+    }
+
+    grouped: dict[str, dict[str, list[Question]]] = {
+        question_type: {difficulty: [] for difficulty in DIFFICULTY_ORDER}
+        for question_type in QUESTION_TYPE_ORDER
+    }
+    for question in questions:
+        grouped.setdefault(question.question_type, {difficulty: [] for difficulty in DIFFICULTY_ORDER})
+        grouped[question.question_type].setdefault(question.difficulty, [])
+        grouped[question.question_type][question.difficulty].append(question)
+
+    selected: list[Question] = []
+    selected_ids: set[int] = set()
+
+    def take_from_pool(pool: list[Question], limit: int) -> None:
+        for item in pool[:limit]:
+            if item.id not in selected_ids:
+                selected.append(item)
+                selected_ids.add(item.id)
+
+    for question_type in QUESTION_TYPE_ORDER:
+        target = type_targets.get(question_type, 0)
+        if target <= 0:
+            continue
+        for difficulty in DIFFICULTY_ORDER:
+            bucket = grouped.get(question_type, {}).get(difficulty, [])
+            remaining = target - len([item for item in selected if item.question_type == question_type])
+            if remaining <= 0:
+                break
+            take_from_pool(bucket, remaining)
+
+    if len(selected) < question_count:
+        remaining_candidates = sorted(
+            [question for question in questions if question.id not in selected_ids],
+            key=lambda item: (
+                DIFFICULTY_ORDER.index(item.difficulty) if item.difficulty in DIFFICULTY_ORDER else len(DIFFICULTY_ORDER),
+                QUESTION_TYPE_ORDER.index(item.question_type) if item.question_type in QUESTION_TYPE_ORDER else len(QUESTION_TYPE_ORDER),
+            ),
+        )
+        take_from_pool(remaining_candidates, question_count - len(selected))
+
+    return selected[:question_count]
+
+
 @router.post("/generate", summary="Placeholder mock exam generate endpoint")
 def generate_mock_exam(payload: MockExamGenerateRequest, db: DBSession, current_user: CurrentUser) -> dict:
     subject = db.get(Subject, payload.subject_id)
     if not subject:
         raise NotFoundException("Subject not found")
 
-    questions = db.scalars(
+    all_questions = db.scalars(
         select(Question)
         .where(Question.subject_id == payload.subject_id)
         .order_by(func.random())
-        .limit(payload.question_count)
     ).all()
+    questions = pick_exam_questions(all_questions, payload.question_count)
     if not questions:
         raise BadRequestException("No questions available for this subject")
 

@@ -86,11 +86,20 @@ def print_summary() -> None:
             "mock_exams": db.query(MockExam).count(),
             "mock_exam_answers": db.query(MockExamAnswer).count(),
         }
+        subject_rows = db.query(Subject).all()
+        subject_breakdown = []
+        for subject in subject_rows:
+            chapter_count = db.query(Chapter).filter(Chapter.subject_id == subject.id).count()
+            question_count = db.query(Question).filter(Question.subject_id == subject.id).count()
+            subject_breakdown.append((subject.name, chapter_count, question_count))
 
     print("Seed completed successfully.")
     print(f"Database file: {Path(settings.sqlite_db_path).resolve()}")
     for key, value in summary.items():
         print(f"{key}: {value}")
+    print("Subject breakdown:")
+    for name, chapter_count, question_count in subject_breakdown:
+        print(f"- {name}: chapters={chapter_count}, questions={question_count}")
 
 
 def main() -> None:

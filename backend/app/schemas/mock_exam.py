@@ -7,7 +7,7 @@ from app.schemas.question import QuestionSchema
 
 class MockExamGenerateRequest(BaseModel):
     subject_id: int
-    question_count: int = 10
+    question_count: int = 15
 
 
 class MockExamSubmitItem(BaseModel):
