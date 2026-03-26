@@ -1,0 +1,3 @@
+paper_code,sort_order,question_type,section_name,chapter,stem,option_a,option_b,option_c,option_d,option_e,option_f,answer,explanation,difficulty,tags,score
+NCRE-L2-WPS-2024-9YUE-SAMPLE,1,single_choice,单选题,历年真题：基础操作,在 WPS 文字中，若要快速复制上一段格式，最适合使用的工具是？,艺术字,格式刷,页面布局,查找替换,,,B,格式刷用于快速复制文本和段落格式。,easy,WPS文字|格式刷,2
+NCRE-L2-WPS-2024-9YUE-SAMPLE,2,short_answer,操作题,历年真题：综合实操,请说明如何在 WPS 表格中使用数据透视表对销售数据按地区和月份进行汇总。,,,,,,,插入数据透视表，设置地区为行、月份为列、销售额为值。,回答应覆盖插入位置、字段拖拽与汇总结果展示。,medium,WPS表格|数据透视表,8

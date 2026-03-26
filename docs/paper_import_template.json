@@ -1,0 +1,47 @@
+{
+  "papers": [
+    {
+      "subject_code": "NCRE-L2-WPS",
+      "code": "NCRE-L2-WPS-2024-9YUE-SAMPLE",
+      "year": 2024,
+      "season": "9月",
+      "title": "2024年9月二级WPS Office高级应用与设计样题",
+      "description": "导入模板示例。建议优先使用 JSON / Excel 以获得最高还原度。",
+      "duration_minutes": 120,
+      "total_score": 100,
+      "source_type": "past_paper",
+      "questions": [
+        {
+          "sort_order": 1,
+          "question_type": "single_choice",
+          "section_name": "单选题",
+          "chapter": "历年真题：基础操作",
+          "stem": "在 WPS 文字中，若要快速复制上一段格式，最适合使用的工具是？",
+          "options": [
+            { "key": "A", "text": "艺术字" },
+            { "key": "B", "text": "格式刷" },
+            { "key": "C", "text": "页面布局" },
+            { "key": "D", "text": "查找替换" }
+          ],
+          "answer": ["B"],
+          "explanation": "格式刷用于快速复制文本和段落格式。",
+          "difficulty": "easy",
+          "tags": ["WPS文字", "格式刷"],
+          "score": 2
+        },
+        {
+          "sort_order": 2,
+          "question_type": "short_answer",
+          "section_name": "操作题",
+          "chapter": "历年真题：综合实操",
+          "stem": "请说明如何在 WPS 表格中使用数据透视表对销售数据按地区和月份进行汇总。",
+          "answer": ["插入数据透视表，设置地区为行、月份为列、销售额为值。"],
+          "explanation": "回答应覆盖插入位置、字段拖拽与汇总结果展示。",
+          "difficulty": "medium",
+          "tags": ["WPS表格", "数据透视表"],
+          "score": 8
+        }
+      ]
+    }
+  ]
+}
